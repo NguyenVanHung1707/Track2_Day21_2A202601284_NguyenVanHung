@@ -23,42 +23,21 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 ## 1. Bộ Siêu Tham Số Đã Chọn và Lý Do
 
-<!-- Khoảng 120 - 150 từ. Điền kết quả thật từ MLflow UI ở Bước 1, tối thiểu 3 lần chạy. -->
-
 | Lần chạy | n_estimators | learning_rate | max_depth | f1_score | accuracy |
 |---|---|---|---|---|---|
-| 1 | ___ | ___ | ___ | ___ | ___ |
-| 2 | ___ | ___ | ___ | ___ | ___ |
-| 3 | ___ | ___ | ___ | ___ | ___ |
+| 1 | 100 | 0.10 | 3 | 0.7109 | 0.8780 |
+| 2 | 50 | 0.05 | 2 | 0.6051 | 0.8460 |
+| 3 | 200 | 0.10 | 5 | 0.7149 | 0.8740 |
 
-**Bộ siêu tham số đã chọn:** `n_estimators=___`, `learning_rate=___`, `max_depth=___`.
+**Bộ siêu tham số đã chọn:** `n_estimators=200`, `learning_rate=0.1`, `max_depth=5`.
 
-**Lý do:** ___
-
-<!--
-Trả lời trong phần Lý do:
-  - Vì sao bộ này tốt hơn các bộ còn lại (dựa trên f1_score, không phải accuracy)?
-  - Lần chạy có accuracy cao nhất có trùng với lần có f1_score cao nhất không?
-    Nếu không, điều đó nói lên điều gì?
-  - Bạn quan sát thấy đánh đổi nào giữa n_estimators và learning_rate?
--->
+**Lý do:** Bộ siêu tham số ở Lần 3 đạt F1-score cao nhất trên lớp dương (0.7149), vượt qua ngưỡng kiểm định 0.65. Mặc dù Lần 1 đạt accuracy cao nhất (0.8780), nhưng F1 của Lần 1 (0.7109) lại thấp hơn Lần 3, chứng minh accuracy cao dễ gây ngộ nhận về năng lực phân loại thực tế. Việc kết hợp `n_estimators=200` và `max_depth=5` giúp mô hình Gradient Boosting học sâu và phát hiện tốt hơn các trường hợp thu nhập cao.
 
 ---
 
 ## 2. Vì Sao Ngưỡng Chất Lượng Đặt Trên F1 Chứ Không Phải Accuracy
 
-<!-- Khoảng 120 - 150 từ. -->
-
-___
-
-<!--
-Cần nêu được:
-  - Phân bố lớp của tập dữ liệu (tỷ lệ lớp thu nhập > 50K) và hệ quả của nó.
-  - Accuracy của một mô hình luôn trả lời "thu nhập thấp" là bao nhiêu, vì sao con số
-    đó gây hiểu nhầm.
-  - F1 của lớp dương đo điều gì mà accuracy không đo được.
-  - Vì sao KHÔNG dùng average="weighted" hay average="macro" khi gọi f1_score.
--->
+Tập dữ liệu Adult bị mất cân bằng lớp nghiêm trọng khi lớp thu nhập cao (>50K) chỉ chiếm 24.8%. Một mô hình vô dụng luôn dự đoán "thu nhập thấp" vẫn đạt Accuracy 75.2% nhưng có F1-score bằng 0 do bỏ sót toàn bộ người có thu nhập cao. F1-score của lớp dương là trung bình điều hòa giữa Precision và Recall, đo lường chính xác khả năng nhận diện đúng các trường hợp thiểu số mà không bị lớp đa số làm lu mờ. Ta không dùng average="weighted" hay "macro" vì trọng số lớp đa số sẽ kéo chỉ số lên cao gây ảo tưởng chất lượng mô hình.
 
 ---
 
