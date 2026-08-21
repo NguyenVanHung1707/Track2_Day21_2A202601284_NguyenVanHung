@@ -66,77 +66,77 @@
   - [x] So sánh các runs theo `f1_score` và `accuracy`.
   - [x] Chọn bộ tham số tốt nhất Lần 3 (`n_estimators: 200`, `learning_rate: 0.1`, `max_depth: 5`) đạt `f1_score = 0.7149 >= 0.65` và lưu cố định vào `params.yaml`.
   - [x] Đã ghi số liệu & phân tích vào [Mục 1 & 2 của báo cáo](nop-bai/bao-cao.md).
-  - [ ] Mở MLflow UI (`mlflow ui --backend-store-uri sqlite:///mlflow.db`) chụp ảnh `01-mlflow-ui.png` lưu vào `nop-bai/anh-chup-man-hinh/`.
+  - [x] Mở MLflow UI (`mlflow ui --backend-store-uri sqlite:///mlflow.db`) chụp ảnh `01-mlflow-ui.png` lưu vào `nop-bai/anh-chup-man-hinh/`.
 
 ---
 
 ## 3. Bước 2: Pipeline CI/CD Tự Động & Triển Khai Cloud
 
-- [ ] **3.1. Thiết lập Cloud Infrastructure & Cloud Storage**:
-  - [ ] Tạo Bucket trên Cloud Storage (GCS / AWS S3 / Azure Blob).
-  - [ ] Tạo Service Account / IAM Credentials với quyền `roles/storage.objectAdmin` trên bucket.
-  - [ ] Xuất file credential (ví dụ `sa-key.json` cho GCP) và lưu bảo mật (không commit vào Git).
-- [ ] **3.2. Cấu hình DVC Remote & Đẩy Dữ Liệu**:
-  - [ ] Khởi tạo DVC: `dvc init`
-  - [ ] Thêm cloud remote: `dvc remote add -d labstore <cloud_storage_url>/dvc`
-  - [ ] Cấu hình credential: `dvc remote modify labstore credentialpath sa-key.json` (hoặc biến môi trường tương ứng)
-  - [ ] Đưa các file dataset vào DVC tracking:
-    - [ ] `dvc add data/train_batch1.csv`
-    - [ ] `dvc add data/holdout.csv`
-    - [ ] `dvc add data/train_batch2.csv`
-  - [ ] Commit file con trỏ DVC (`.dvc`) và `.dvc/config` vào Git.
-  - [ ] Đẩy dữ liệu lên Cloud Storage: `dvc push` (xác nhận folder `dvc/` đã xuất hiện trên cloud).
-- [ ] **3.3. Thiết lập Cloud VM (GCE / EC2 / Azure VM)**:
-  - [ ] Tạo máy ảo Ubuntu 22.04 LTS (e.g. `income-api`).
-  - [ ] Cấu hình Firewall mở cổng `8080` (TCP).
-  - [ ] Lấy địa chỉ Public IP của VM (`SERVER_HOST`).
-  - [ ] SSH vào VM, cài đặt môi trường: `python3-pip`, `fastapi`, `uvicorn`, `scikit-learn`, `joblib`, cloud SDK (`google-cloud-storage`/`boto3`/`azure-storage-blob`).
-  - [ ] Tạo các thư mục `~/models`, `~/src` trên VM.
-  - [ ] Copy file credential (`sa-key.json`) lên VM.
-- [ ] **3.4. Lập trình REST API `src/serve.py`**:
-  - [ ] `TODO 2.6.1` -> `2.6.5`: Viết hàm `download_model()` tải `model.joblib` từ Cloud Storage (`artifacts/current/model.joblib`) về `~/models/model.joblib`.
-  - [ ] `TODO 2.6.6`: Viết endpoint `GET /healthz` trả về `{"status": "ok"}`.
-  - [ ] `TODO 2.6.7`: Kiểm tra đầu vào `len(req.features) == 10` (nếu sai trả lỗi 400).
-  - [ ] `TODO 2.6.8`: Gọi `model.predict([req.features])`.
-  - [ ] `TODO 2.6.9`: Trả về kết quả JSON `{"prediction": <0|1>, "label": <"thu_nhap_thap"|"thu_nhap_cao">}`.
-  - [ ] Copy `src/serve.py` lên VM (`~/src/serve.py`).
-- [ ] **3.5. Cấu hình Systemd Service trên VM**:
-  - [ ] Tạo file `/etc/systemd/system/income-api.service` với biến môi trường `ARTIFACT_BUCKET` và credentials.
-  - [ ] Reload daemon và enable service: `sudo systemctl daemon-reload && sudo systemctl enable income-api`.
-- [ ] **3.6. Cấu hình SSH Deploy & GitHub Secrets**:
-  - [ ] Tạo cặp SSH key chuyên dụng: `ssh-keygen -t ed25519 -f ~/.ssh/income_deploy -N "" -C "github-actions-deploy"`.
-  - [ ] Thêm public key (`income_deploy.pub`) vào `~/.ssh/authorized_keys` trên VM.
-  - [ ] Thêm đủ 5 Secrets trên GitHub Repo (Settings > Secrets and variables > Actions):
-    - [ ] `STORAGE_CREDENTIALS` (Nội dung JSON service account / Access keys)
-    - [ ] `ARTIFACT_BUCKET` (Tên bucket)
-    - [ ] `SERVER_HOST` (IP Public VM)
-    - [ ] `SERVER_USER` (Username SSH trên VM)
-    - [ ] `SERVER_SSH_KEY` (Nội dung private key `income_deploy`)
-- [ ] **3.7. Viết Unit Tests `tests/test_train.py`**:
-  - [ ] `TODO 2.10.1` -> `2.10.5`: Viết hàm `_make_temp_data(tmp_path)` sinh dữ liệu giả lập 10 features, 2 classes (160 train, 40 holdout).
-  - [ ] `TODO 2.10.6` -> `2.10.7`: Viết `test_train_returns_float` kiểm tra `train()` trả về float trong $[0.0, 1.0]$.
-  - [ ] `TODO 2.10.8` -> `2.10.9`: Viết `test_report_file_created` kiểm tra file `outputs/report.json` chứa `f1_score` và `accuracy`.
-  - [ ] `TODO 2.10.10`: Viết `test_model_file_created` kiểm tra file `models/model.joblib` được tạo.
-  - [ ] Chạy kiểm thử cục bộ: `pytest tests/ -v` (3/3 test pass).
-- [ ] **3.8. Hoàn thiện Pipeline CI/CD `.github/workflows/cicd.yml`**:
-  - [ ] `TODO 2.11.1`: Job `unit-test` chạy `pytest tests/ -v`.
-  - [ ] `TODO 2.11.2`: Job `train` cấu hình xác thực Cloud Storage từ secret.
-  - [ ] `TODO 2.11.3`: Job `train` kéo dữ liệu bằng `dvc pull`.
-  - [ ] `TODO 2.11.4`: Job `train` đọc `f1_score` từ `outputs/report.json` và xuất ra `$GITHUB_OUTPUT`.
-  - [ ] `TODO 2.11.5`: Job `train` upload `models/model.joblib` lên Cloud Storage (`artifacts/current/model.joblib`).
-  - [ ] `TODO 2.11.6`: Job `quality-gate` kiểm tra `float(f1) >= 0.65` (nếu không đạt thì exit 1 chặn release).
-  - [ ] `TODO 2.11.7` -> `2.11.8`: Job `release` dùng `appleboy/ssh-action` restart service trên VM và kiểm tra `curl http://localhost:8080/healthz`.
-- [ ] **3.9. Kích hoạt & Kiểm tra Pipeline Bước 2**:
-  - [ ] Commit và push code lên GitHub `main`.
-  - [ ] Theo dõi Actions tab: Đảm bảo cả 4 jobs (`Unit Test`, `Train`, `Quality Gate`, `Release`) đều XANH.
-  - [ ] Kiểm tra thủ công API qua terminal:
-    - [ ] `curl http://<VM_IP>:8080/healthz`
-    - [ ] `curl -X POST http://<VM_IP>:8080/score -H "Content-Type: application/json" -d '{"features": [60, 2, 5, 2, 4, 0, 1, 0, 0, 45]}'`
-    - [ ] `curl -X POST http://<VM_IP>:8080/score -H "Content-Type: application/json" -d '{"features": [28, 2, 14, 2, 11, 0, 1, 0, 0, 45]}'`
-  - [ ] Chụp 3 ảnh bằng chứng Bước 2:
-    - [ ] `02-actions-buoc-2.png`
-    - [ ] `04-curl-api.png`
-    - [ ] `05-cloud-storage.png`
+- [x] **3.1. Thiết lập Cloud Infrastructure & Cloud Storage**:
+  - [x] Tạo Bucket trên Cloud Storage (`gs://income-lab-2a202601284`).
+  - [x] Tạo Service Account / IAM Credentials với quyền `roles/storage.objectAdmin` trên bucket.
+  - [x] Xuất file credential (ví dụ `sa-key.json` / ADC cho GCP) và lưu bảo mật (không commit vào Git).
+- [x] **3.2. Cấu hình DVC Remote & Đẩy Dữ Liệu**:
+  - [x] Khởi tạo DVC: `dvc init`
+  - [x] Thêm cloud remote: `dvc remote add -d gcs-remote gs://income-lab-2a202601284/dvc`
+  - [x] Cấu hình credential: GCP ADC / Service Account
+  - [x] Đưa các file dataset vào DVC tracking:
+    - [x] `dvc add data/train_batch1.csv`
+    - [x] `dvc add data/holdout.csv`
+    - [x] `dvc add data/train_batch2.csv`
+  - [x] Commit file con trỏ DVC (`.dvc`) và `.dvc/config` vào Git.
+  - [x] Đẩy dữ liệu lên Cloud Storage: `dvc push` (xác nhận folder `dvc/` đã xuất hiện trên cloud).
+- [x] **3.3. Thiết lập Cloud VM (GCE / EC2 / Azure VM)**:
+  - [x] Tạo máy ảo Ubuntu 22.04 LTS (`income-api`, IP `34.60.69.202`).
+  - [x] Cấu hình Firewall mở cổng `8080` (TCP).
+  - [x] Lấy địa chỉ Public IP của VM (`SERVER_HOST = 34.60.69.202`).
+  - [x] SSH vào VM, cài đặt môi trường: `fastapi`, `uvicorn`, `scikit-learn==1.4.2`, `joblib`, `google-cloud-storage`.
+  - [x] Tạo các thư mục `~/models`, `~/src` trên VM.
+  - [x] Cấu hình quyền Cloud Storage cho VM Service Account.
+- [x] **3.4. Lập trình REST API `src/serve.py`**:
+  - [x] `TODO 2.6.1` -> `2.6.5`: Viết hàm `download_model()` tải `model.joblib` từ Cloud Storage (`artifacts/current/model.joblib`) về `~/models/model.joblib`.
+  - [x] `TODO 2.6.6`: Viết endpoint `GET /healthz` trả về `{"status": "ok"}`.
+  - [x] `TODO 2.6.7`: Kiểm tra đầu vào `len(req.features) == 10` (nếu sai trả lỗi 400).
+  - [x] `TODO 2.6.8`: Gọi `model.predict([req.features])`.
+  - [x] `TODO 2.6.9`: Trả về kết quả JSON `{"prediction": <0|1>, "label": <"thu_nhap_thap"|"thu_nhap_cao">}`.
+  - [x] Copy `src/serve.py` lên VM (`~/src/serve.py`).
+- [x] **3.5. Cấu hình Systemd Service trên VM**:
+  - [x] Tạo file `/etc/systemd/system/income-api.service` với biến môi trường `ARTIFACT_BUCKET` và credentials.
+  - [x] Reload daemon và enable service: `sudo systemctl daemon-reload && sudo systemctl enable income-api`.
+- [x] **3.6. Cấu hình SSH Deploy & GitHub Secrets**:
+  - [x] Tạo cặp SSH key chuyên dụng: `ssh-keygen -t ed25519 -f ~/.ssh/income_deploy -N "" -C "github-actions-deploy"`.
+  - [x] Thêm public key (`income_deploy.pub`) vào `~/.ssh/authorized_keys` trên VM.
+  - [x] Thêm đủ 5 Secrets trên GitHub Repo (Settings > Secrets and variables > Actions):
+    - [x] `STORAGE_CREDENTIALS` (Nội dung JSON service account / ADC)
+    - [x] `ARTIFACT_BUCKET` (`income-lab-2a202601284`)
+    - [x] `SERVER_HOST` (`34.60.69.202`)
+    - [x] `SERVER_USER` (`HUNG`)
+    - [x] `SERVER_SSH_KEY` (Nội dung private key `income_deploy`)
+- [x] **3.7. Viết Unit Tests `tests/test_train.py`**:
+  - [x] `TODO 2.10.1` -> `2.10.5`: Viết hàm `_make_temp_data(tmp_path)` sinh dữ liệu giả lập 10 features, 2 classes (160 train, 40 holdout).
+  - [x] `TODO 2.10.6` -> `2.10.7`: Viết `test_train_returns_float` kiểm tra `train()` trả về float trong $[0.0, 1.0]$.
+  - [x] `TODO 2.10.8` -> `2.10.9`: Viết `test_report_file_created` kiểm tra file `outputs/report.json` chứa `f1_score` và `accuracy`.
+  - [x] `TODO 2.10.10`: Viết `test_model_file_created` kiểm tra file `models/model.joblib` được tạo.
+  - [x] Chạy kiểm thử cục bộ: `pytest tests/ -v` (3/3 test pass).
+- [x] **3.8. Hoàn thiện Pipeline CI/CD `.github/workflows/cicd.yml`**:
+  - [x] `TODO 2.11.1`: Job `unit-test` chạy `pytest tests/ -v`.
+  - [x] `TODO 2.11.2`: Job `train` cấu hình xác thực Cloud Storage từ secret.
+  - [x] `TODO 2.11.3`: Job `train` kéo dữ liệu bằng `dvc pull`.
+  - [x] `TODO 2.11.4`: Job `train` đọc `f1_score` từ `outputs/report.json` và xuất ra `$GITHUB_OUTPUT`.
+  - [x] `TODO 2.11.5`: Job `train` upload `models/model.joblib` lên Cloud Storage (`artifacts/current/model.joblib`).
+  - [x] `TODO 2.11.6`: Job `quality-gate` kiểm tra `float(f1) >= 0.65` (nếu không đạt thì exit 1 chặn release).
+  - [x] `TODO 2.11.7` -> `2.11.8`: Job `release` dùng `appleboy/ssh-action` restart service trên VM và kiểm tra `curl http://localhost:8080/healthz`.
+- [x] **3.9. Kích hoạt & Kiểm tra Pipeline Bước 2**:
+  - [x] Commit và push code lên GitHub `main`.
+  - [x] Theo dõi Actions tab: Đảm bảo cả 4 jobs (`Unit Test`, `Train`, `Quality Gate`, `Release`) đều XANH.
+  - [x] Kiểm tra thủ công API qua terminal:
+    - [x] `curl http://<VM_IP>:8080/healthz`
+    - [x] `curl -X POST http://<VM_IP>:8080/score -H "Content-Type: application/json" -d '{"features": [60, 2, 5, 2, 4, 0, 1, 0, 0, 45]}'`
+    - [x] `curl -X POST http://<VM_IP>:8080/score -H "Content-Type: application/json" -d '{"features": [28, 2, 14, 2, 11, 0, 1, 0, 0, 45]}'`
+  - [x] Chụp 3 ảnh bằng chứng Bước 2:
+    - [x] `02-actions-buoc-2.png`
+    - [x] `04-curl-api.png`
+    - [x] `05-cloud-storage.png`
 
 ---
 
@@ -186,11 +186,11 @@
 
 Đảm bảo đủ **5 ảnh bắt buộc** đặt tại `nop-bai/anh-chup-man-hinh/` (đúng tên file, dung lượng mỗi ảnh $< 1\text{MB}$, hiển thị URL trình duyệt):
 
-- [ ] `01-mlflow-ui.png`: MLflow UI hiển thị $\ge 3$ runs, thấy rõ các cột `f1_score`, `accuracy`, `n_estimators`, `learning_rate`, `max_depth` và thanh URL `localhost:5000`.
-- [ ] `02-actions-buoc-2.png`: GitHub Actions Bước 2 với 4 jobs xanh (`Unit Test`, `Train`, `Quality Gate`, `Release`) và commit message code.
+- [x] `01-mlflow-ui.png`: MLflow UI hiển thị $\ge 3$ runs, thấy rõ các cột `f1_score`, `accuracy`, `n_estimators`, `learning_rate`, `max_depth` và thanh URL `localhost:5000`.
+- [x] `02-actions-buoc-2.png`: GitHub Actions Bước 2 với 4 jobs xanh (`Unit Test`, `Train`, `Quality Gate`, `Release`) và commit message code.
 - [ ] `03-actions-buoc-3.png`: GitHub Actions Bước 3 được kích hoạt bởi commit dữ liệu mới, 4 jobs xanh.
-- [ ] `04-curl-api.png`: Terminal hiển thị cả 2 lệnh `curl http://<VM_IP>:8080/healthz` và `curl -X POST http://<VM_IP>:8080/score`, thấy rõ IP VM và kết quả JSON.
-- [ ] `05-cloud-storage.png`: Giao diện Cloud Console hiển thị thư mục `dvc/` và file `artifacts/current/model.joblib`, thấy rõ tên bucket.
+- [x] `04-curl-api.png`: Terminal hiển thị cả 2 lệnh `curl http://<VM_IP>:8080/healthz` và `curl -X POST http://<VM_IP>:8080/score`, thấy rõ IP VM và kết quả JSON.
+- [x] `05-cloud-storage.png`: Giao diện Cloud Console hiển thị thư mục `dvc/` và file `artifacts/current/model.joblib`, thấy rõ tên bucket.
 - [ ] *(Nếu làm Bonus)*: Các ảnh bổ sung `06-*.png`, `07-*.png`.
 
 ---

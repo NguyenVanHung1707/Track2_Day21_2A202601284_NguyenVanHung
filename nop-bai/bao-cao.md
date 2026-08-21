@@ -13,11 +13,11 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | | |
 |---|---|
-| Họ và tên | ___ |
-| MSSV | ___ |
+| Họ và tên | Nguyễn Văn Hùng |
+| MSSV | 2A202601284 |
 | Lớp / Khóa | K4 |
-| Repo GitHub | https://github.com/___/___ |
-| Ngày nộp | ___ |
+| Repo GitHub | https://github.com/NguyenVanHung1707/Track2_Day21_2A202601284_NguyenVanHung |
+| Ngày nộp | 21/08/2026 |
 
 ---
 
@@ -43,13 +43,11 @@ Tập dữ liệu Adult bị mất cân bằng lớp nghiêm trọng khi lớp t
 
 ## 3. Khó Khăn Gặp Phải và Cách Giải Quyết
 
-<!-- Nêu 2 - 3 khó khăn thật, mỗi ô một câu ngắn. -->
-
 | Khó khăn | Nguyên nhân | Cách giải quyết |
 |---|---|---|
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
-| ___ | ___ | ___ |
+| Lệnh tạo Service Account Key bị chặn | Chính sách bảo mật GCP chặn tạo key JSON thủ công (`disableServiceAccountKeyCreation`) | Cấp IAM `roles/storage.objectAdmin` cho Compute SA và dùng ADC JSON cho GitHub Actions |
+| Lỗi unpickle model trên VM | Khác biệt phiên bản scikit-learn giữa môi trường train và môi trường VM | Cài đặt cố định `scikit-learn==1.4.2` đồng nhất theo `requirements.txt` trên VM |
+| Lỗi xác thực project khi upload artifact | `storage.Client` trên runner không tự nhận diện `project_id` nếu không truyền tham số | Truyền biến `GOOGLE_CLOUD_PROJECT` và khởi tạo `storage.Client(project=project_id)` |
 
 ---
 
@@ -59,7 +57,7 @@ Tập dữ liệu Adult bị mất cân bằng lớp nghiêm trọng khi lớp t
 
 | | f1_score | accuracy |
 |---|---|---|
-| Bước 2 (chỉ `train_batch1`) | ___ | ___ |
+| Bước 2 (chỉ `train_batch1`) | 0.7149 | 0.8740 |
 | Bước 3 (thêm `train_batch2`) | ___ | ___ |
 
 **Nhận xét:** ___
