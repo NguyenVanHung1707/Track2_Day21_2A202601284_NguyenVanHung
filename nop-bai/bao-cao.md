@@ -53,6 +53,7 @@ Tập dữ liệu Adult bị mất cân bằng lớp nghiêm trọng khi lớp t
 
 ## 5. Phần Bonus Đã Thực Hiện
 
+- [x] **Bonus 1 - Tracking MLflow từ xa với DagsHub:** Tích hợp remote server tại `https://dagshub.com/NguyenVanHung1707/Track2_Day21_2A202601284_NguyenVanHung.mlflow`, tự động log tham số và metrics mỗi lần chạy CI/CD.
 - [x] **Bonus 2 - Điều chỉnh ngưỡng quyết định:** Quét ngưỡng từ 0.1 đến 0.9, tìm được ngưỡng tối ưu 0.30 giúp F1-score tăng từ 0.7354 lên 0.7537 (+0.0183).
 - [x] **Bonus 3 - Báo cáo precision / recall tự động:** Tự động sinh `outputs/detail.txt` chứa Confusion Matrix và chỉ số từng lớp. Với bài toán này, bỏ sót người thu nhập cao (Recall thấp) tốn kém hơn do đánh mất khách hàng tiềm năng giá trị.
 - [x] **Bonus 4 - Hoàn trả về phiên bản trước (Rollback Safety):** Tự động sao lưu model hiện tại vào `artifacts/previous/` và Quality Gate sẽ hủy release nếu F1 mới bị suy giảm chất lượng.

@@ -67,7 +67,11 @@ jobs:
         run: |
           dvc pull data/train_batch1.csv.dvc data/holdout.csv.dvc
 
-      - name: Train model & Run Bonus checks
+      - name: Train model & Run Bonus checks (including DagsHub MLflow)
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_USER_TOKEN }}
         run: python src/train.py
 
       - name: Read report & Extract metrics
