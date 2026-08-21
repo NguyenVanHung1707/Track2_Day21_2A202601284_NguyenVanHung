@@ -13,7 +13,7 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | | |
 |---|---|
-| Họ và tên | Nguyễn Văn Hùng |
+| Họ và tên | Nguyễn Văn Hưng |
 | MSSV | 2A202601284 |
 | Lớp / Khóa | K4 |
 | Repo GitHub | https://github.com/NguyenVanHung1707/Track2_Day21_2A202601284_NguyenVanHung |
