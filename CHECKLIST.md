@@ -218,7 +218,7 @@
   - [x] `git push origin main` hoàn tất.
 - [x] **8.3. Kiểm tra tính khả dụng công khai**:
   - [x] GitHub Repository đã được chuyển sang chế độ **Public** (`https://github.com/NguyenVanHung1707/Track2_Day21_2A202601284_NguyenVanHung`).
-- [ ] **8.4. Nộp link bài tập**:
-  - [ ] Copy URL GitHub Repo.
-  - [ ] Dán vào trang nộp bài tại **https://codelabs.vlearn.dev**.
+- [x] **8.4. Nộp link bài tập**:
+  - [x] Copy URL GitHub Repo (`https://github.com/NguyenVanHung1707/Track2_Day21_2A202601284_NguyenVanHung`).
+  - [x] Dán vào trang nộp bài tại **https://codelabs.vlearn.dev** (Đã nộp thành công).
 
