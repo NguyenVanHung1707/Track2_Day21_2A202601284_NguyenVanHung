@@ -180,8 +180,9 @@
 - [x] `03-actions-buoc-3.png`: GitHub Actions Bước 3 được kích hoạt bởi commit dữ liệu mới, 4 jobs xanh.
 - [x] `04-curl-api.png`: Terminal hiển thị cả 2 lệnh `curl http://<VM_IP>:8080/healthz` và `curl -X POST http://<VM_IP>:8080/score`, thấy rõ IP VM và kết quả JSON.
 - [x] `05-cloud-storage.png`: Giao diện Cloud Console hiển thị thư mục `dvc/` và file `artifacts/current/model.joblib`, thấy rõ tên bucket.
-- [x] `06-actions-bonus.png`: GitHub Actions Bonus run với 4 jobs xanh và artifact `model-reports`.
+- [x] `06-dagshub-mlflow.png`: Giao diện DagsHub Experiments hiển thị remote MLflow tracking cho repo GitHub.
 - [x] `07-bonus-mlflow.png`: MLflow UI tracking các độ đo Bonus (`best_threshold: 0.30`, `best_f1_tuned: 0.7537`, `positive_ratio: 0.2478`).
+- [x] `08-actions-bonus.png`: GitHub Actions Bonus run với 4 jobs xanh và artifact `model-reports`.
 
 ---
 
