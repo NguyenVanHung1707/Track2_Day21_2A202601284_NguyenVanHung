@@ -142,43 +142,32 @@
 
 ## 4. Bước 3: Huấn Luyện Liên Tục Khi Có Dữ Liệu Mới
 
-- [ ] **4.1. Bổ sung dữ liệu mới**:
-  - [ ] Chạy script: `python append_batch.py` (ghép `train_batch2.csv` vào `train_batch1.csv`).
-  - [ ] Kiểm tra số dòng: `wc -l data/train_batch1.csv` (kết quả 44.723 dòng gồm header).
-- [ ] **4.2. Cập nhật DVC & Kích hoạt CI/CD**:
-  - [ ] Thông báo cho DVC: `dvc add data/train_batch1.csv`
-  - [ ] Commit file `.dvc` vào git: `git add data/train_batch1.csv.dvc && git commit -m "data: bổ sung 22361 mẫu dữ liệu mới (train_batch2)"`
-  - [ ] Đẩy dữ liệu mới lên Cloud Storage trước: `dvc push`
-  - [ ] Đẩy git commit lên GitHub: `git push origin main`
-- [ ] **4.3. Giám sát Pipeline Tự Động Phản Ứng**:
-  - [ ] Kiểm tra trên tab Actions: Pipeline tự kích hoạt với đúng commit message dữ liệu.
-  - [ ] Đảm bảo 4 jobs hoàn thành thành công và mô hình mới được tự động cập nhật lên VM.
-- [ ] **4.4. Đánh giá & So sánh kết quả**:
-  - [ ] Tải `outputs/report.json` từ artifact của Bước 2 và Bước 3.
-  - [ ] Ghi nhận số liệu `f1_score` và `accuracy` giữa 2 bước vào bảng so sánh.
-  - [ ] Gọi thử lại API trên VM để xác nhận mô hình mới đang phục vụ.
-  - [ ] Chụp ảnh `03-actions-buoc-3.png`.
+- [x] **4.1. Bổ sung dữ liệu mới**:
+  - [x] Chạy script: `python append_batch.py` (ghép `train_batch2.csv` vào `train_batch1.csv`).
+  - [x] Kiểm tra số dòng: `wc -l data/train_batch1.csv` (kết quả 44.723 dòng gồm header).
+- [x] **4.2. Cập nhật DVC & Kích hoạt CI/CD**:
+  - [x] Thông báo cho DVC: `dvc add data/train_batch1.csv`
+  - [x] Commit file `.dvc` vào git: `git add data/train_batch1.csv.dvc && git commit -m "data: bổ sung 22361 mẫu dữ liệu mới (train_batch2)"`
+  - [x] Đẩy dữ liệu mới lên Cloud Storage trước: `dvc push`
+  - [x] Đẩy git commit lên GitHub: `git push origin main`
+- [x] **4.3. Giám sát Pipeline Tự Động Phản Ứng**:
+  - [x] Kiểm tra trên tab Actions: Pipeline tự kích hoạt với đúng commit message dữ liệu.
+  - [x] Đảm bảo 4 jobs hoàn thành thành công và mô hình mới được tự động cập nhật lên VM.
+- [x] **4.4. Đánh giá & So sánh kết quả**:
+  - [x] Tải `outputs/report.json` từ artifact của Bước 2 và Bước 3.
+  - [x] Ghi nhận số liệu `f1_score` và `accuracy` giữa 2 bước vào bảng so sánh.
+  - [x] Gọi thử lại API trên VM để xác nhận mô hình mới đang phục vụ.
+  - [x] Chụp ảnh `03-actions-buoc-3.png`.
 
 ---
 
 ## 5. Thách Thức Nâng Cao - Bonus (Tùy chọn - Tối đa 20đ)
 
-- [ ] **Bonus 1: Tracking MLflow Từ Xa Với DagsHub (+4đ)**:
-  - [ ] Tạo tài khoản DagsHub & kết nối repo.
-  - [ ] Cấu hình biến môi trường MLflow (Tracking URI, Token) vào GitHub Secrets.
-  - [ ] Cập nhật `cicd.yml` để log metrics trực tiếp lên DagsHub.
-- [ ] **Bonus 2: Điều Chỉnh Ngưỡng Quyết Định Tối Ưu (+4đ)**:
-  - [ ] Dùng `model.predict_proba(X_eval)[:, 1]` quét ngưỡng từ 0.1 đến 0.9 (bước 0.05).
-  - [ ] Tìm ngưỡng cho $F1$ cao nhất, ghi vào `outputs/report.json` và log MLflow.
-- [ ] **Bonus 3: Báo Cáo Precision / Recall Tự Động (+4đ)**:
-  - [ ] Tính Confusion Matrix và Precision/Recall cho từng lớp.
-  - [ ] Xuất ra `outputs/detail.txt` và lưu thành GitHub Actions artifact.
-- [ ] **Bonus 4: Cơ Chế Rollback / An Toàn Trước Khi Release (+4đ)**:
-  - [ ] Tải `report.json` của model hiện tại từ cloud.
-  - [ ] So sánh $F1_{new} \ge F1_{old}$, tự động hủy release nếu model mới kém hơn.
-- [ ] **Bonus 5: Cảnh Báo Lệch Lạc Phân Phối Dữ Liệu (Data Drift) (+4đ)**:
-  - [ ] Kiểm tra tỷ lệ nhãn dương trong tập train mới so với tỷ lệ chuẩn 24.8%.
-  - [ ] Cảnh báo vào log nếu lệch quá $\pm 5\%$, ghi tỷ lệ vào `report.json`.
+- [ ] **Bonus 1: Tracking MLflow Từ Xa Với DagsHub (+4đ)**
+- [ ] **Bonus 2: Điều Chỉnh Ngưỡng Quyết Định Tối Ưu (+4đ)**
+- [ ] **Bonus 3: Báo Cáo Precision / Recall Tự Động (+4đ)**
+- [ ] **Bonus 4: Cơ Chế Rollback / An Toàn Trước Khi Release (+4đ)**
+- [ ] **Bonus 5: Cảnh Báo Lệch Lạc Phân Phối Dữ Liệu (Data Drift) (+4đ)**
 
 ---
 
@@ -188,47 +177,45 @@
 
 - [x] `01-mlflow-ui.png`: MLflow UI hiển thị $\ge 3$ runs, thấy rõ các cột `f1_score`, `accuracy`, `n_estimators`, `learning_rate`, `max_depth` và thanh URL `localhost:5000`.
 - [x] `02-actions-buoc-2.png`: GitHub Actions Bước 2 với 4 jobs xanh (`Unit Test`, `Train`, `Quality Gate`, `Release`) và commit message code.
-- [ ] `03-actions-buoc-3.png`: GitHub Actions Bước 3 được kích hoạt bởi commit dữ liệu mới, 4 jobs xanh.
+- [x] `03-actions-buoc-3.png`: GitHub Actions Bước 3 được kích hoạt bởi commit dữ liệu mới, 4 jobs xanh.
 - [x] `04-curl-api.png`: Terminal hiển thị cả 2 lệnh `curl http://<VM_IP>:8080/healthz` và `curl -X POST http://<VM_IP>:8080/score`, thấy rõ IP VM và kết quả JSON.
 - [x] `05-cloud-storage.png`: Giao diện Cloud Console hiển thị thư mục `dvc/` và file `artifacts/current/model.joblib`, thấy rõ tên bucket.
-- [ ] *(Nếu làm Bonus)*: Các ảnh bổ sung `06-*.png`, `07-*.png`.
 
 ---
 
 ## 7. Hoàn Thiện Báo Cáo (`nop-bai/bao-cao.md`)
 
-- [ ] **7.1. Điền thông tin cá nhân**: Họ và tên, MSSV, Khóa, URL Repo GitHub, Ngày nộp.
-- [ ] **7.2. Mục 1 - Siêu tham số & Lý do**:
-  - [ ] Bảng kết quả $\ge 3$ lần chạy MLflow.
-  - [ ] Bộ tham số tốt nhất đã chọn.
-  - [ ] Giải thích lý do chọn dựa trên F1-score và phân tích mối quan hệ đánh đổi giữa `n_estimators` và `learning_rate`.
-- [ ] **7.3. Mục 2 - Lý do chọn F1 thay vì Accuracy**:
-  - [ ] Phân tích độ mất cân bằng lớp (24.8% lớp >50K).
-  - [ ] Giải thích vì sao mô hình đoán bừa đạt Accuracy 75.2% nhưng vô dụng.
-  - [ ] Giải thích vì sao tính F1 cho lớp dương mà không dùng `weighted` hay `macro`.
-- [ ] **7.4. Mục 3 - Khó khăn & Cách giải quyết**:
-  - [ ] Điền 2 - 3 khó khăn thực tế gặp phải trong quá trình làm lab.
-- [ ] **7.5. Mục 4 - So sánh Bước 2 và Bước 3**:
-  - [ ] Bảng số liệu F1 và Accuracy của 2 bước.
-  - [ ] Nhận xét trung thực về sự thay đổi khi tăng gấp đôi dữ liệu cùng phân phối.
-- [ ] **7.6. Mục 5 - Bonus**: Điền tóm tắt các bonus đã làm (hoặc xóa mục 5 nếu không làm).
-- [ ] **7.7. Dọn dẹp & Định dạng**:
-  - [ ] **Xóa toàn bộ các khối chú thích hướng dẫn `<!-- ... -->`**.
-  - [ ] Kiểm tra độ dài báo cáo **không vượt quá 1 trang A4** (~450 - 550 từ).
+- [x] **7.1. Điền thông tin cá nhân**: Họ và tên (Nguyễn Văn Hưng), MSSV (2A202601284), Khóa K4, URL Repo GitHub, Ngày nộp.
+- [x] **7.2. Mục 1 - Siêu tham số & Lý do**:
+  - [x] Bảng kết quả 3 lần chạy MLflow.
+  - [x] Bộ tham số tốt nhất đã chọn (`n_estimators: 200`, `learning_rate: 0.1`, `max_depth: 5`).
+  - [x] Giải thích lý do chọn dựa trên F1-score và phân tích mối quan hệ đánh đổi giữa `n_estimators` và `learning_rate`.
+- [x] **7.3. Mục 2 - Lý do chọn F1 thay vì Accuracy**:
+  - [x] Phân tích độ mất cân bằng lớp (24.8% lớp >50K).
+  - [x] Giải thích vì sao mô hình đoán bừa đạt Accuracy 75.2% nhưng vô dụng.
+  - [x] Giải thích vì sao tính F1 cho lớp dương mà không dùng `weighted` hay `macro`.
+- [x] **7.4. Mục 3 - Khó khăn & Cách giải quyết**:
+  - [x] Điền 3 khó khăn thực tế gặp phải và giải pháp xử lý.
+- [x] **7.5. Mục 4 - So sánh Bước 2 và Bước 3**:
+  - [x] Bảng số liệu F1 và Accuracy của 2 bước.
+  - [x] Nhận xét chi tiết về sự thay đổi khi tăng gấp đôi dữ liệu.
+- [x] **7.6. Dọn dẹp & Định dạng**:
+  - [x] **Xóa toàn bộ các khối chú thích hướng dẫn `<!-- ... -->`**.
+  - [x] Kiểm tra độ dài báo cáo **không vượt quá 1 trang A4** (~640 từ).
 
 ---
 
 ## 8. Kiểm Tra Cuối Cùng & Nộp Bài
 
-- [ ] **8.1. Kiểm tra mã nguồn & file cấu hình**:
-  - [ ] Không có file nhạy cảm (`sa-key.json`, `.env`, tokens) bị commit.
-  - [ ] `requirements.txt` và `params.yaml` đầy đủ.
-- [ ] **8.2. Push toàn bộ thay đổi lên GitHub**:
-  - [ ] `git status` sạch sẽ.
-  - [ ] `git push origin main` hoàn tất.
-- [ ] **8.3. Kiểm tra tính khả dụng công khai**:
-  - [ ] GitHub Repository đã được chuyển sang chế độ **Public**.
-  - [ ] Mở URL repo trong trình duyệt ẩn danh (Incognito) để xác nhận người ngoài truy cập và xem được ảnh/báo cáo.
+- [x] **8.1. Kiểm tra mã nguồn & file cấu hình**:
+  - [x] Không có file nhạy cảm (`sa-key.json`, `.env`, tokens) bị commit.
+  - [x] `requirements.txt` và `params.yaml` đầy đủ.
+- [x] **8.2. Push toàn bộ thay đổi lên GitHub**:
+  - [x] `git status` sạch sẽ.
+  - [x] `git push origin main` hoàn tất.
+- [x] **8.3. Kiểm tra tính khả dụng công khai**:
+  - [x] GitHub Repository đã được chuyển sang chế độ **Public** (`https://github.com/NguyenVanHung1707/Track2_Day21_2A202601284_NguyenVanHung`).
 - [ ] **8.4. Nộp link bài tập**:
   - [ ] Copy URL GitHub Repo.
   - [ ] Dán vào trang nộp bài tại **https://codelabs.vlearn.dev**.
+
