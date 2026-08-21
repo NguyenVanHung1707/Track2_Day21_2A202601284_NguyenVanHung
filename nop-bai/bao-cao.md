@@ -48,3 +48,12 @@ Tập dữ liệu Adult bị mất cân bằng lớp nghiêm trọng khi lớp t
 | Bước 3 (thêm `train_batch2`) | 0.7354 | 0.8820 |
 
 **Nhận xét:** Khi tăng gấp đôi dữ liệu huấn luyện từ 22.361 lên 44.722 mẫu (cùng phân phối), F1-score tăng nhẹ từ 0.7149 lên 0.7354 (+0.0205) và Accuracy tăng từ 0.8740 lên 0.8820 (+0.0080). Dữ liệu bổ sung giúp thuật toán Gradient Boosting củng cố các biên phân loại và giảm phương sai ước lượng, qua đó nhận diện nhóm thu nhập cao chính xác hơn mà vẫn đảm bảo vượt Quality Gate. Quan trọng nhất, toàn bộ chu trình huấn luyện lại, kiểm tra chất lượng và tái triển khai lên Cloud VM đã diễn ra hoàn toàn tự động chỉ từ một commit cập nhật dữ liệu.
+
+---
+
+## 5. Phần Bonus Đã Thực Hiện
+
+- [x] **Bonus 2 - Điều chỉnh ngưỡng quyết định:** Quét ngưỡng từ 0.1 đến 0.9, tìm được ngưỡng tối ưu 0.30 giúp F1-score tăng từ 0.7354 lên 0.7537 (+0.0183).
+- [x] **Bonus 3 - Báo cáo precision / recall tự động:** Tự động sinh `outputs/detail.txt` chứa Confusion Matrix và chỉ số từng lớp. Với bài toán này, bỏ sót người thu nhập cao (Recall thấp) tốn kém hơn do đánh mất khách hàng tiềm năng giá trị.
+- [x] **Bonus 4 - Hoàn trả về phiên bản trước (Rollback Safety):** Tự động sao lưu model hiện tại vào `artifacts/previous/` và Quality Gate sẽ hủy release nếu F1 mới bị suy giảm chất lượng.
+- [x] **Bonus 5 - Cảnh báo lệch lạc dữ liệu (Data Drift):** Kiểm tra tỷ lệ nhãn dương trong tập train mới đạt 24.78%, ổn định sát mức tham chiếu 24.80% (độ lệch 0.02% < 5%).

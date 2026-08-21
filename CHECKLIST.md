@@ -164,10 +164,10 @@
 ## 5. Thách Thức Nâng Cao - Bonus (Tùy chọn - Tối đa 20đ)
 
 - [ ] **Bonus 1: Tracking MLflow Từ Xa Với DagsHub (+4đ)**
-- [ ] **Bonus 2: Điều Chỉnh Ngưỡng Quyết Định Tối Ưu (+4đ)**
-- [ ] **Bonus 3: Báo Cáo Precision / Recall Tự Động (+4đ)**
-- [ ] **Bonus 4: Cơ Chế Rollback / An Toàn Trước Khi Release (+4đ)**
-- [ ] **Bonus 5: Cảnh Báo Lệch Lạc Phân Phối Dữ Liệu (Data Drift) (+4đ)**
+- [x] **Bonus 2: Điều Chỉnh Ngưỡng Quyết Định Tối Ưu (+4đ)**: Quét threshold 0.1-0.9, tìm ngưỡng tối ưu 0.30 nâng F1 lên 0.7537.
+- [x] **Bonus 3: Báo Cáo Precision / Recall Tự Động (+4đ)**: Xuất `outputs/detail.txt` chứa Confusion Matrix và Classification Report.
+- [x] **Bonus 4: Cơ Chế Rollback / An Toàn Trước Khi Release (+4đ)**: Tự động sao lưu model hiện tại vào `artifacts/previous/` và kiểm tra chống suy giảm chất lượng trước khi release.
+- [x] **Bonus 5: Cảnh Báo Lệch Lạc Phân Phối Dữ Liệu (Data Drift) (+4đ)**: Kiểm tra tỷ lệ nhãn dương trong tập train mới so với baseline 24.8%.
 
 ---
 
