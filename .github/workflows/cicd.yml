@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'data/**.dvc'
-      - 'src/**.py'
+      - 'data/**'
+      - 'src/**'
       - 'params.yaml'
   workflow_dispatch:
 
@@ -14,8 +14,6 @@ jobs:
   # ---------------------------------------------------------------------------
   # JOB 1 - UNIT TEST
   # Chay unit tests tren du lieu ao (khong can ket noi cloud storage).
-  # Neu co bat ky test nao that bai, pipeline dung lai o day va khong tien hanh
-  # huan luyen hay trien khai.
   # ---------------------------------------------------------------------------
   unit-test:
     name: Unit Test
@@ -31,14 +29,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run unit tests
-        # TODO 1: Viet lenh de chay pytest tren thu muc tests/ voi co -v
         run: pytest tests/ -v
 
 
   # ---------------------------------------------------------------------------
   # JOB 2 - TRAIN
   # Xac thuc cloud storage, pull du lieu bang DVC, huan luyen mo hinh, upload artifact.
-  # Chi chay khi Job 1 (Unit Test) hoan thanh thanh cong.
   # ---------------------------------------------------------------------------
   train:
     name: Train
@@ -58,13 +54,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Authenticate to Cloud Storage
-        # TODO 2: Ghi noi dung credentials ra file tam va set bien moi truong xac thuc.
         run: |
           echo '${{ secrets.STORAGE_CREDENTIALS }}' > /tmp/sa-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa-key.json" >> $GITHUB_ENV
+          echo "GOOGLE_CLOUD_PROJECT=track2-day16-2a202601284" >> $GITHUB_ENV
 
       - name: Pull data with DVC
-        # TODO 3: Pull cac file du lieu can thiet tu cloud storage bang lenh dvc pull.
         run: |
           dvc pull data/train_batch1.csv.dvc data/holdout.csv.dvc
 
@@ -73,13 +68,11 @@ jobs:
 
       - name: Read report
         id: read_report
-        # TODO 4: Doc gia tri "f1_score" tu outputs/report.json bang Python inline.
         run: |
           F1=$(python -c "import json; d=json.load(open('outputs/report.json')); print(d['f1_score'])")
           echo "f1=$F1" >> $GITHUB_OUTPUT
 
       - name: Upload model to Cloud Storage
-        # TODO 5: Su dung cloud SDK de upload models/model.joblib len <bucket>/artifacts/current/model.joblib
         env:
           ARTIFACT_BUCKET: ${{ secrets.ARTIFACT_BUCKET }}
         run: |
@@ -88,7 +81,8 @@ jobs:
           from google.cloud import storage
 
           bucket_name = os.environ["ARTIFACT_BUCKET"]
-          client = storage.Client()
+          project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "track2-day16-2a202601284")
+          client = storage.Client(project=project_id)
           bucket = client.bucket(bucket_name)
           blob = bucket.blob("artifacts/current/model.joblib")
           blob.upload_from_filename("models/model.joblib")
@@ -113,7 +107,6 @@ jobs:
     steps:
 
       - name: Check quality gate
-        # TODO 6: Doc f1 tu output cua job train. Kiem tra f1 >= 0.65
         run: |
           python - <<'PYEOF'
           f1 = float("${{ needs.train.outputs.f1 }}")
@@ -141,7 +134,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            # TODO 7 & 8: Restart service income-api tren VM va kiem tra suc khoe
             sudo systemctl restart income-api
             sleep 5
             curl -sf http://localhost:8080/healthz && echo "Health check passed." || exit 1
